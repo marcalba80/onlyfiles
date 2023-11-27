@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block body %} 
+{% block main %} 
 
     {% comment %} TODO: ADD if user is admin {% endcomment %}
     {% if user.is_admin %}
@@ -23,4 +23,4 @@
         <h4>No repository to show files.</h4>
     {% endif %}
 
-{% block body %} {% endblock body %}
+{% endblock main %}

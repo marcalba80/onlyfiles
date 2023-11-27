@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block body %}
+{% block main %}
 
 {% if not user.is_authenticated %}
 
@@ -71,4 +71,4 @@
     <h4>You need to log in to see your repositories.</h4>
 {% endif %}
 
-{% endblock body %}
+{% endblock main %}
