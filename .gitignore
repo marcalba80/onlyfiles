@@ -1,3 +1,5 @@
 *sqlite3
 onlyfilesapp/__pycache__/*
 onlyfiles/__pycache__/*
+onlyfilesapp/migrations/*
+.vscode/*

@@ -13,6 +13,13 @@ class Register(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
 
+def Init(request):
+    template = 'Playlist/Playlists.html'
+    context = {
+
+    }
+    return render(request, template, context)
+
 def Repo(request):
     template = 'Playlist/Playlists.html'
     context = {
