@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from rest_framework.generics import GenericAPIView
 
 from onlyfilesapp.models import *
@@ -11,6 +12,7 @@ from onlyfilesapp.forms import *
 
 # Create your views here.
 
+@csrf_protect
 def Register(request):
     form = CreateUserForm()
 
@@ -20,14 +22,14 @@ def Register(request):
             form.save()
             user = form.cleaned_data.get('username')
             messages.success(request, 'Account was created for ' + user)
-            return redirect('loginPage')
+            return redirect('login')
 
     context = {
         'form': form,
     }
     return render(request, 'signup.html', context)
 
-
+@csrf_protect
 def Login(request):
 
     if request.method == 'POST':
@@ -73,6 +75,7 @@ def File(request):
     }
     return render(request, template, context)
 
+@csrf_protect
 def CreateRepo(request):
     template = 'createRepository.html'
     context = {
@@ -92,6 +95,7 @@ def CreateRepo(request):
         
     return render(request, template, context)
 
+@csrf_protect
 def AddUser(request):
     template = 'addUser.html'
     context = {
@@ -113,6 +117,7 @@ def AddUser(request):
             pass
     return render(request, template, context)
 
+@csrf_protect
 def AddFile(request):
     template = 'Playlist/Playlists.html'
     context = {
