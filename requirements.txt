@@ -1,0 +1,7 @@
+Django>=5.0
+social-auth-core
+social-auth-app-Django
+requests
+djangorestframework
+django-dotenv
+firebase-admin

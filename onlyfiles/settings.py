@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'oauth2_provider',
+    'onlyfilesapp',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +50,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # This is the default that allows us to log in via username
+    # 'account.authentication.EmailAuthBackend'
 ]
 
 ROOT_URLCONF = 'onlyfiles.urls'
