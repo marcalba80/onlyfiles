@@ -19,14 +19,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import RedirectView
-from onlyfilesapp.views import SocialSignupAPIView
+from onlyfilesapp.views import SocialSignupAPIView, Login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='onlyfilesapp/'), name='home'),
     # url(r'^admin/', admin.site.urls),
-    path('accounts/login/', LoginView.as_view(), name='login'),
-    path('accounts/logout/', LogoutView.as_view(), name='logout'),
-    path('socialSignup/', SocialSignupAPIView.as_view(), name='social-signup'),
+    path('login', Login.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='logout'),
+    path('socialSignup', SocialSignupAPIView.as_view(), name='social-signup'),
     path('onlyfilesapp/', include('onlyfilesapp.urls')),
 ]

@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from rest_framework.generics import GenericAPIView
 
 from onlyfilesapp.models import *
+from onlyfilesapp.forms import *
 
 # Create your views here.
 
@@ -12,6 +15,17 @@ class Register(CreateView):
     template_name = "signup.html"
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
+class Login(LoginView):
+    model = UserRepo
+    template_name = "login.html"
+    form_class = CustomLoginForm
+    success_url = reverse_lazy('home')
+
+# class Logout(LogoutView):
+#     model = UserRepo
+#     template_name = "login.html"
+#     form_class = UserLoginForm
+#     success_url = reverse_lazy('home')
 
 def Init(request):
     template = 'index.html'
