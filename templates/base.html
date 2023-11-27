@@ -8,13 +8,14 @@
     <title>{% block title %} {% endblock title %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="icon" href="{% static 'img/of_icono.ico' %}" type="image/x-icon"/> 
 </head>
 
 <body>
     {% if not user.is_authenticated %}
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <img src="{% static 'img/of_logo.jpeg' %}" alt="of-logo" style="height: 1.6rem" />
+            <img src="{% static 'img/of_logo.png' %}" alt="of-logo" style="height: 3rem" />
             {% comment %} <a class="navbar-brand" href="/">OnlyFiles</a> {% endcomment %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -101,7 +102,29 @@
 
     {% block body %}{% endblock body %}
 
-    <footer class="text-center py-4">Copyright Application Security | All rights reserved</footer>
+    <!-- Footer -->
+<footer class="bg-dark text-light">
+  <div class="container py-5">
+      <div class="row">
+          <div class="col-md-4">
+              <img src="{% static 'img/of_logo.png' %}" alt="OnlyFiles Logo" class="img-fluid">
+          </div>
+          <div class="col-md-4">
+            <h5>Links</h5>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#" class="text-light">Home</a></li>
+                <li class="list-inline-item"><a href="#" class="text-light">About Us</a></li>
+                <li class="list-inline-item"><a href="#" class="text-light">Contact</a></li>
+            </ul>
+          </div>
+        
+    </div>
+</div>
+<div class="text-center p-3">
+    <p class="mb-0">&copy; 2023 OnlyFiles. All rights reserved.</p>
+</div>
+</footer>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
