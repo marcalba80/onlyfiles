@@ -77,6 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'onlyfiles.wsgi.application'
 
+# AUTH_USER_MODEL = 'onlyfilesapp.UserRepo'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

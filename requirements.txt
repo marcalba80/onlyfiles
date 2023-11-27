@@ -1,4 +1,4 @@
-Django>=5.0
+Django
 social-auth-core
 social-auth-app-Django
 requests
