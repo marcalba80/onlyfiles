@@ -44,6 +44,11 @@
     </div>
 </div>
 
+<style>
+  main {height: 75vh;}
+</style>
+
+
 {% endif %}
 
 {% if user.is_admin %}
@@ -68,7 +73,9 @@
     <h4>No repositories to show.</h4>
   {% endif %}
 {% else %}
-    <h4>You need to log in to see your repositories.</h4>
+  <div class="d-flex flex-column">
+      <h4>You need to log in to see your repositories.</h4>
+  </div>
 {% endif %}
 
 {% endblock main %}
