@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block main %} 
+
+    {% comment %} TODO: ADD if user is admin {% endcomment %}
+    {% if user.is_admin %}
+        <div class="d-flex gap-1 justify-content-center mt-1">
+            <div>Do you want to add a user?</div>
+            <a href="/addUser" class="text-decoration-none fw-semibold">Add it!</a>
+        </div>
+    {% endif %}
+
+    {% if repository %}
+        <div id="Card" class="card">
+            <ul class="list-group list-group-flush">
+                {% for file in repository %}
+                    <li class="list-group-item"><h5><a id="List" href="#" name="repo_file_name">
+                        {{ file.name }}</a>
+                    </h5></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <h4>No repository to show files.</h4>
+    {% endif %}
+
+{% endblock main %}

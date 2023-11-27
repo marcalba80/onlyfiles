@@ -9,19 +9,19 @@ from onlyfilesapp.models import *
 
 class Register(CreateView):
     model = User
-    template_name = "registration/registration.html"
+    template_name = "signup.html"
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
 
 def Init(request):
-    template = 'home.html'
+    template = 'index.html'
     context = {
         
     }
     return render(request, template, context)
 
 def Repo(request):
-    template = 'Playlist/Playlists.html'
+    template = 'repository.html'
     context = {
         "repos": User_Repository.objects.filter(userepo=request.user),
     }
@@ -36,7 +36,7 @@ def File(request):
     return render(request, template, context)
 
 def CreateRepo(request):
-    template = 'createRepo.html'
+    template = 'createRepository.html'
     context = {
         # "repo_name": request.GET.get('repo_name'),
     }
@@ -55,7 +55,7 @@ def CreateRepo(request):
     return render(request, template, context)
 
 def AddUser(request):
-    template = 'Playlist/Playlists.html'
+    template = 'addUser.html'
     context = {
         "repo_name": request.GET.get('repo_name')
         

@@ -5,3 +5,4 @@ onlyfilesapp/migrations/*
 *.key.*
 *.env
 .vscode/*
+**/__pycache__/
