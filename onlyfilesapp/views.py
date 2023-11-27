@@ -98,3 +98,6 @@ def AddFile(request):
             pass
     
     return render(request, template, context)
+
+class SocialSignupAPIView(GenericAPIView):
+    pass
