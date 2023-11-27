@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class UserRepo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.CharField(max_length=120)
+    # email = models.CharField(max_length=120)
     is_admin = models.BooleanField(default=False)
 
     def __unicode__(self):

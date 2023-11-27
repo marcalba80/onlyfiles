@@ -17,7 +17,7 @@ urlpatterns = [
     # path(r'^Repo/UploadFile/$', views.Upload, name="Edit"),
 
     path('', views.Init, name='init'),
-    path('signup', views.Register.as_view(), name="signup"),
+    # path('signup', views.Register.as_view(), name="signup"),
     path('repository', views.Repo, name="Repositories"),
 
     path('repository/file', views.File, name='Files'),

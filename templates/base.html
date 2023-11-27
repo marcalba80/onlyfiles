@@ -12,120 +12,113 @@
 </head>
 
 <body>
-    {% if not user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <img src="{% static 'img/of_logo.png' %}" alt="of-logo" style="height: 3rem" />
-            {% comment %} <a class="navbar-brand" href="/">OnlyFiles</a> {% endcomment %}
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 px-5">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a class="nav-link" href="#">About us</a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-                {% if user.is_authenticated%}
-                    {% comment %} TODO: ADD LOGOUT PAGE + FUNCTION {% endcomment %}
-                    <a class="btn btn-info mx-2" href="/logout">Log out</a>
-                {% else %}
-                    <a class="btn btn-info mx-2" href="/login">Log in</a>
-                    <a class="btn btn-secondary" href="/signup">Sign up</a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-    {% else %}
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+  {% if user.is_authenticated %}
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; height: 100vh;">
+    <img src="{% static 'img/of_logo.png' %}" alt="of-logo" />
+      {% comment %} <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32">
+              <use xlink:href="#bootstrap" />
+          </svg>
           <span class="fs-4">Sidebar</span>
-        </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
+      </a> {% endcomment %}
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#repository"/></svg>
-              My repository
-            </a>
+              <a href="#" class="nav-link active" aria-current="page">
+                  <svg class="bi me-2" width="16" height="16">
+                      <use xlink:href="#repository" />
+                  </svg>
+                  My repository
+              </a>
           </li>
           <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
-              Dashboard
-            </a>
+              <a href="#" class="nav-link link-dark">
+                  <svg class="bi me-2" width="16" height="16">
+                      <use xlink:href="#speedometer2" />
+                  </svg>
+                  Dashboard
+              </a>
           </li>
           <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-              Orders
-            </a>
+              <a href="{% url 'logout' %}" class="nav-link link-dark">
+                  <svg class="bi me-2" width="16" height="16">
+                      <use xlink:href="#people-circle" />
+                  </svg>
+                  Logout
+              </a>
           </li>
-          <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-              Products
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-              Customers
-            </a>
-          </li>
-        </ul>
-        <hr>
-        <div class="dropdown">
-          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-            <strong>mdo</strong>
+      </ul>
+      <hr>
+      <div class="dropdown">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+              <strong>mdo</strong>
           </a>
           <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-            <li><a class="dropdown-item" href="#">New project...</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
+              <li><a class="dropdown-item" href="#">New project...</a></li>
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li>
+                  <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Sign out</a></li>
           </ul>
-        </div>
-    </div>
+      </div>
+  </div>
+  {% else %} 
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+          <img src="{% static 'img/of_logo.png' %}" alt="of-logo" style="height: 3rem" />
+          {% comment %} <a class="navbar-brand" href="/">OnlyFiles</a> {% endcomment %}
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0 px-5">
+                  <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="/">Home</a>
+                  </li>
+                  <li class="nav-item px-2">
+                      <a class="nav-link" href="#">About us</a>
+                  </li>
+                  <li class="nav-item px-2">
+                      <a class="nav-link" href="#">Contact</a>
+                  </li>
+              </ul>
+                <a class="btn btn-info mx-2" href="/login">Log in</a>
+                <a class="btn btn-secondary" href="/signup">Sign up</a>
+          </div>
+      </div>
+    </nav>
     {% endif %}
 
     <main class="min-vh-100">{% block main %}{% endblock main %}</main>    
 
     <!-- Footer -->
-<footer class="bg-dark text-light">
-  <div class="container py-5">
-      <div class="row">
-          <div class="col-md-4">
-              <img src="{% static 'img/of_logo.png' %}" alt="OnlyFiles Logo" class="img-fluid">
-          </div>
-          <div class="col-md-4">
-            <h5>Links</h5>
-            <ul class="list-inline">
-                <li class="list-inline-item"><a href="#" class="text-light">Home</a></li>
-                <li class="list-inline-item"><a href="#" class="text-light">About Us</a></li>
-                <li class="list-inline-item"><a href="#" class="text-light">Contact</a></li>
-            </ul>
-          </div>
-        
+    <footer class="bg-dark text-light">
+      <div class="container py-5">
+          <div class="row">
+              <div class="col-md-4">
+                  <img src="{% static 'img/of_logo.png' %}" alt="OnlyFiles Logo" class="img-fluid">
+              </div>
+              <div class="col-md-4">
+                <h5>Links</h5>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="#" class="text-light">Home</a></li>
+                    <li class="list-inline-item"><a href="#" class="text-light">About Us</a></li>
+                    <li class="list-inline-item"><a href="#" class="text-light">Contact</a></li>
+                </ul>
+              </div>
+            
+        </div>
     </div>
-</div>
-<div class="text-center p-3">
-    <p class="mb-0">&copy; 2023 OnlyFiles. All rights reserved.</p>
-</div>
-</footer>
-
-
+    <div class="text-center p-3">
+        <p class="mb-0">&copy; 2023 OnlyFiles. All rights reserved.</p>
+    </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
