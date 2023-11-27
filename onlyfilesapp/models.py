@@ -21,7 +21,7 @@ class Repository(models.Model):
     
 
 class User_Repository(models.Model):
-    userepo = models.ForeignKey(UserRepo, null=True, on_delete=models.CASCADE)
+    userepo = models.ForeignKey(UserRepo, null=True, on_delete=models.DO_NOTHING)
     repository = models.ForeignKey(Repository, null=True, on_delete=models.CASCADE)
     user_admin = models.BooleanField(default=False)
 
@@ -31,6 +31,7 @@ class User_Repository(models.Model):
 class Files(models.Model):
     name = models.CharField(max_length=120, unique=True)
     cloud_id = models.TextField()
+    file = models.TextField()
 
     def __unicode__(self):
         return u"%s" % self.name

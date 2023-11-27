@@ -17,12 +17,13 @@ urlpatterns = [
     # path(r'^Repo/UploadFile/$', views.Upload, name="Edit"),
 
     path('', views.Init, name='init'),
-    path('Signup/', views.Register.as_view(), name="registre"),
-    path('Repo/', views.Repo, name="Create_playlist"),
+    path('Signup/', views.Register.as_view(), name="signup"),
+    path('Repo/', views.Repo, name="Repositories"),
 
-    path('Repo/File/', views.File, name='Edit_playlist'),
-    path('CreateRepo/', views.CreateRepo, name='playlist'),
+    path('Repo/File/', views.File, name='Files'),
+    path('CreateRepo/', views.CreateRepo, name='createRepo'),
 
-    path('Repo/AddUser/', views.AddUser, name="Delete_playlist"),
+    path('Repo/AddUser/', views.AddUser, name="AddUser"),
+    path('Repo/AddFile/', views.AddFile, name="AddFile"),
     
 ]
