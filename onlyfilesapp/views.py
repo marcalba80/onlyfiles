@@ -16,20 +16,21 @@ class Register(CreateView):
 def Init(request):
     template = 'Playlist/Playlists.html'
     context = {
-
+        
     }
     return render(request, template, context)
 
 def Repo(request):
     template = 'Playlist/Playlists.html'
     context = {
-
+        "repos": User_Repository.objects.filter(userepo=request.user),
     }
     return render(request, template, context)
 
 def File(request):
     template = 'Playlist/Playlists.html'
     context = {
+        "files": Files_Repository.objects.filter(repository=request.GET.get('repo'))
         
     }
     return render(request, template, context)
