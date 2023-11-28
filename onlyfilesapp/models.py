@@ -14,7 +14,7 @@ class UserRepo(models.Model):
 
 class Repository(models.Model):
     name = models.CharField(max_length=120, unique=True)
-    master_key = models.TextField()
+    master_key = models.TextField(null=True)
 
     def __unicode__(self):
         return u"%s" % self.name
@@ -30,7 +30,7 @@ class User_Repository(models.Model):
 
 class Files(models.Model):
     name = models.CharField(max_length=120, unique=True)
-    cloud_id = models.TextField()
+    cloud_id = models.TextField(null=True)
     file = models.BinaryField(default=b'\x00')
 
     def __unicode__(self):

@@ -3,19 +3,20 @@
 {% block main %}
 
     {% comment %} TODO: ADD if user is admin {% endcomment %}
-    {% if user.is_admin %}
+    {% if is_admin %}
         <div class="d-flex flex-column gap-1 justify-content-center mt-1">
             <div>Do you want to add a user?</div>
             <a href="/addUser" class="text-decoration-none fw-semibold">Add it!</a>
         </div>
     {% endif %}
 
-    {% if repository %}
+    {% if files %}
         <div id="Card" class="flex-column card">
+            <h4 class="flex-column">Repository: {{ repo.name }}</h4>
             <ul class="list-group list-group-flush">
-                {% for file in repository %}
-                    <li class="list-group-item"><h5><a id="List" href="#" name="repo_file_name">
-                        {{ file.name }}</a>
+                {% for file in files %}
+                    <li class="list-group-item"><h5><a id="List" href="getFile?pk={{ file.file.pk }}" name="repo_file_name">
+                        {{ file.file.name }}</a>
                     </h5></li>
                 {% endfor %}
             </ul>

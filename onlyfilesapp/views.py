@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.http import FileResponse
 from rest_framework.generics import GenericAPIView
 
 from onlyfilesapp.models import *
@@ -19,7 +20,9 @@ def Register(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            userrepo = UserRepo(user=user, is_admin=False)
+            userrepo.save()
             user = form.cleaned_data.get('username')
             messages.success(request, 'Account was created for ' + user)
             return redirect('login')
@@ -55,25 +58,50 @@ def Logout(request):
 
 def Init(request):
     template = 'index.html'
+    # print("User: " + str(request.user.is_authenticated))
     context = {
         
     }
+    if request.user.is_authenticated:
+        context.update({"repos": User_Repository.objects.filter(userepo=UserRepo.objects.get(user=request.user))})
+    
     return render(request, template, context)
+
+# def Repo(request):
+#     template = 'repository.html'
+#     context = {
+#         "repos": User_Repository.objects.filter(userepo=request.user),
+#     }
+#     return render(request, template, context)
 
 def Repo(request):
     template = 'repository.html'
     context = {
-        "repos": User_Repository.objects.filter(userepo=request.user),
+            
     }
+    if request.user.is_authenticated:
+        reponame = request.GET.get('repo')
+        user = UserRepo.objects.get(user=request.user)
+        repos = User_Repository.objects.get(userepo=user, repository__name=reponame)
+        if repos:
+            context.update(
+                {
+                "files": Files_Repository.objects.filter(repository=repos.repository),
+                "repo": repos.repository,
+                "is_admin": repos.user_admin,
+                }
+            )
     return render(request, template, context)
 
-def File(request):
-    template = 'Playlist/Playlists.html'
-    context = {
-        "files": Files_Repository.objects.filter(repository=request.GET.get('repo')),
-        
-    }
-    return render(request, template, context)
+def GetFile(request):
+    pk = request.GET.get('pk')
+    response = FileResponse(b'\x00')
+    response['Content-Type'] = 'application/x-binary'
+    response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(pk) # You can set custom filename, which will be visible for clients.
+    return response
+
+# def download(request, pk):
+#     pass
 
 @csrf_protect
 def CreateRepo(request):
