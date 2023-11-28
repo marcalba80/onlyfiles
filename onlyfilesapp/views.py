@@ -136,8 +136,12 @@ def CreateRepo(request):
         else:
             repo_inst = Repository(name=repo_name, master_key="")
             repo_inst.save()
+            repouser_inst = User_Repository(userepo=user_repo_instance, repository=repo_inst, user_admin=True)
+            repouser_inst.save()
+
+            return redirect('home')
             # TODO: SEND MESSAGE REPOSITORY CREATED
-    
+        
     form = CreateRepoForm()
     context = {
         'form': form,
