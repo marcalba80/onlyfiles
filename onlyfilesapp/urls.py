@@ -20,7 +20,7 @@ urlpatterns = [
     # path('signup', views.Register.as_view(), name="signup"),
     path('repository', views.Repo, name="Repositories"),
 
-    path('repository/file', views.File, name='Files'),
+    path('getFile', views.GetFile, name='Files'),
     path('createRepository', views.CreateRepo, name='createRepo'),
 
     path('repository/addUser', views.AddUser, name="AddUser"),
