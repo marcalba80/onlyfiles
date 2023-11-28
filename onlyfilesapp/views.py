@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import FileResponse
-from rest_framework.generics import GenericAPIView
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
@@ -185,6 +184,3 @@ def AddFile(request):
             pass
     
     return render(request, template, context)
-
-class SocialSignupAPIView(GenericAPIView):
-    pass

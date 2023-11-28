@@ -10,6 +10,10 @@ class UserRepo(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.user.username
+    
+    def __str__(self):
+        return self.user.username
+    
 
 
 class Repository(models.Model):
@@ -19,6 +23,10 @@ class Repository(models.Model):
     def __unicode__(self):
         return u"%s" % self.name
     
+    def __str__(self):
+        return self.name
+    
+    
 
 class User_Repository(models.Model):
     userepo = models.ForeignKey(UserRepo, null=True, on_delete=models.DO_NOTHING)
@@ -27,6 +35,10 @@ class User_Repository(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.userepo.name + u" - %s" % self.repository.name
+    
+    def __str__(self):
+        return self.userepo.user.username + "-" + self.repository.name
+    
 
 class Files(models.Model):
     name = models.CharField(max_length=120, unique=True)
@@ -35,6 +47,10 @@ class Files(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.name
+    
+    def __str__(self):
+        return self.name
+    
 
 class Files_Repository(models.Model):
     file = models.ForeignKey(Files, null=True, on_delete=models.CASCADE)
@@ -42,3 +58,7 @@ class Files_Repository(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.file.name + u" - %s" % self.repository.name
+    
+    def __str__(self):
+        return self.file.name + "-" + self.repository.name
+    

@@ -1,8 +1,5 @@
 Django
 requests
-djangorestframework
-django-dotenv
-firebase-admin
 django-allauth
 django-extensions
 Werkzeug
