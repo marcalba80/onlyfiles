@@ -58,7 +58,7 @@
     <div id="Card" class="card">
         <ul class="list-group list-group-flush">
             {% for repo in repos %}
-                <li class="list-group-item"><h5><a id="List" href="repository?repo={{ repo.repository.name }}" name="repository">
+                <li class="list-group-item"><h5><a id="List" href="repository?pk={{ repo.repository.pk }}" name="repository">
                     {{ repo.repository.name }}</a>
                 </h5></li>
             {% endfor %}

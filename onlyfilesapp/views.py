@@ -50,6 +50,14 @@ def Login(request):
 
     return render(request, 'login.html')
 
+def successoauth(request):
+    if request.user.is_authenticated:
+        userr = UserRepo.objects.filter(user=request.user)
+        if not userr:
+            userrepo = UserRepo(user=request.user, is_admin=False)
+            userrepo.save()
+    return redirect('home')
+
 def Logout(request):
 
     logout(request)
@@ -81,9 +89,9 @@ def Repo(request):
             
     }
     if request.user.is_authenticated:
-        reponame = request.GET.get('repo')
+        reponame = request.GET.get('pk')
         user = UserRepo.objects.get(user=request.user)
-        repos = User_Repository.objects.get(userepo=user, repository__name=reponame)
+        repos = User_Repository.objects.get(userepo=user, repository__pk=reponame)
         if repos:
             files = Files_Repository.objects.filter(repository=repos.repository)
             context.update(
@@ -120,10 +128,11 @@ def CreateRepo(request):
         repo_name = request.POST.get('repo_name')
         repo = User_Repository.objects.filter(repository__name=repo_name, 
                                               userepo=request.user)
+        user = UserRepo.objects.get(userepo=request.user)
         if not repo:
             repo_inst = Repository(name=repo_name, master_key="")
             repo_inst.save()
-            repouser_inst = User_Repository(userepo=request.user, repository=repo_inst, user_admin=True)
+            repouser_inst = User_Repository(userepo=user, repository=repo_inst, user_admin=True)
             repouser_inst.save()
         else:
             pass
