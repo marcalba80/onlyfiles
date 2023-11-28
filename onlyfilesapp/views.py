@@ -97,10 +97,15 @@ def Repo(request):
 
 def GetFile(request):
     pk = request.GET.get('pk')
-    response = FileResponse(b'\x00')
-    response['Content-Type'] = 'application/x-binary'
-    response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(pk) # You can set custom filename, which will be visible for clients.
-    return response
+    userr = UserRepo.objects.get(user=request.user)
+    file = Files.objects.get(pk=pk)
+    filerepo = Files_Repository.objects.get(file=file)
+    userepo = User_Repository.objects.get(userepo=userr, repository=filerepo.repository)
+    if userepo:
+        response = FileResponse(file.file)
+        response['Content-Type'] = 'text/plain'
+        response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(pk) # You can set custom filename, which will be visible for clients.
+        return response
 
 # def download(request, pk):
 #     pass

@@ -31,7 +31,7 @@ class User_Repository(models.Model):
 class Files(models.Model):
     name = models.CharField(max_length=120, unique=True)
     cloud_id = models.TextField(null=True)
-    file = models.BinaryField(default=b'\x00')
+    file = models.TextField(default="Test")
 
     def __unicode__(self):
         return u"%s" % self.name
