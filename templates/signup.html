@@ -8,7 +8,7 @@
             <p id="messages">{{message}}</p>
         {% endfor %}
         <div class="text-center fs-1 fw-bold">Register</div>
-        <div class="input-group mt-4">
+        <div class="input-group mt-4 align-items-center justify-content-center">
             <form method="POST" action="">
                 {% csrf_token %}        
             
@@ -50,4 +50,11 @@
         }
     </script>
 </div>
+
+<style>
+    main {
+        height: 50vh;
+    }
+</style>
+
 {% endblock main %}

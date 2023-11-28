@@ -4,6 +4,16 @@
 
     {% comment %} TODO: ADD if user is admin {% endcomment %}
     {% if is_admin %}
+
+        <form method="POST" action="">
+            {% csrf_token %}    
+        
+            <label class="form-label" for="customFile">Select a file</label>
+            {{form.file}}        
+            <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Upload it"/>
+        
+        </form>
+
         <div class="d-flex flex-column gap-1 justify-content-center mt-1">
             <div>Do you want to add a user?</div>
             <a href="/addUser" class="text-decoration-none fw-semibold">Add it!</a>

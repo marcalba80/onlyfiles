@@ -7,6 +7,7 @@ from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import FileResponse
 from rest_framework.generics import GenericAPIView
+from django.contrib.auth.decorators import login_required
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
@@ -15,6 +16,9 @@ from onlyfilesapp.forms import *
 
 @csrf_protect
 def Register(request):
+    # if request.user.is_authenticated:
+    #     return redirect('home')
+
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -34,6 +38,8 @@ def Register(request):
 
 @csrf_protect
 def Login(request):
+    # if request.user.is_authenticated:
+    #     return redirect('home')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -57,7 +63,10 @@ def Logout(request):
     return redirect('login')
 
 def Init(request):
-    template = 'index.html'
+    if request.user.is_authenticated:
+        template = 'index.html'
+    else:
+        template = 'index2.html'
     # print("User: " + str(request.user.is_authenticated))
     context = {
         
@@ -75,6 +84,7 @@ def Init(request):
 #     }
 #     return render(request, template, context)
 
+@login_required(login_url='login')
 def Repo(request):
     template = 'repository.html'
     context = {
@@ -82,6 +92,7 @@ def Repo(request):
     }
     if request.user.is_authenticated:
         reponame = request.GET.get('repo')
+        print(reponame)
         user = UserRepo.objects.get(user=request.user)
         repos = User_Repository.objects.get(userepo=user, repository__name=reponame)
         if repos:
@@ -113,22 +124,36 @@ def GetFile(request):
 @csrf_protect
 def CreateRepo(request):
     template = 'createRepository.html'
-    context = {
-        # "repo_name": request.GET.get('repo_name'),
-    }
     if request.method == 'POST':
-        repo_name = request.POST.get('repo_name')
+
+        repo_name = request.POST.get('name')
+        user_repo_instance = UserRepo.objects.get(user=request.user)
         repo = User_Repository.objects.filter(repository__name=repo_name, 
-                                              userepo=request.user)
-        if not repo:
+                                              userepo=user_repo_instance)
+        if repo:
+            # TODO: SEND MESSAGE REPO_NAME FOR THIS USER ALREADY EXISTS
+            pass
+        else:
             repo_inst = Repository(name=repo_name, master_key="")
             repo_inst.save()
-            repouser_inst = User_Repository(userepo=request.user, repository=repo_inst, user_admin=True)
-            repouser_inst.save()
-        else:
-            pass
+            # TODO: SEND MESSAGE REPOSITORY CREATED
+    
+    form = CreateRepoForm()
+    context = {
+        'form': form,
+    }
         
     return render(request, template, context)
+
+def uploadFile(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            request.FILES["file"]
+            return redirect('repository')
+    
+    form = UploadFileForm()
+    return render(request, "uploadFile.html", {"form": form})
 
 @csrf_protect
 def AddUser(request):
