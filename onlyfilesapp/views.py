@@ -142,14 +142,15 @@ def CreateRepo(request):
 def AddUser(request):
     template = 'addUser.html'
     context = {
-        "repo_name": request.GET.get('repo_name')
+        "repo_name": request.GET.get('pk')
         
     }
     if request.method == 'POST':
-        adduser_name = request.POST.get('add_user')
-        repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-                                              userepo=request.user, user_admin=True)
-        repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
+        adduser_name = request.POST.get('username')
+        userr = UserRepo.objects.get(user=request.user)
+        repos_admin = User_Repository.objects.get(repository__pk=context['repo_name'], 
+                                              userepo=userr, user_admin=True)
+        repo_user = User_Repository.objects.filter(repository__pk=context['repo_name'], 
                                               userepo__user__username=adduser_name)
         if repos_admin and not repo_user:
             repo_inst = repos_admin.repository
