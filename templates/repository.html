@@ -7,16 +7,20 @@
 
         <form method="POST" action="">
             {% csrf_token %}    
-        
-            <label class="form-label" for="customFile">Select a file</label>
-            {{form.file}}        
-            <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Upload it"/>
-        
+            <div class="mt-5">
+                <label class="form-label" for="customFile">Select a file</label>
+                {{form.file}}        
+            </div>
+            <div>
+                <input class="btn btn-info custom-bg-color text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Upload it"/>
+            </div>
         </form>
 
         <div class="d-flex flex-column gap-1 justify-content-center mt-1">
-            <div>Do you want to add a user?</div>
-            <a href="/addUser" class="text-decoration-none fw-semibold">Add it!</a>
+            <div>
+                <p class="d-inline">Do you want to add a user?</p>
+                <a href="/addUser" class="text-decoration-none fw-semibold">Add it!</a>
+            </div>
         </div>
     {% endif %}
 
@@ -32,7 +36,7 @@
             </ul>
         </div>
     {% else %}
-        <h4 class="flex-column">No repository to show files.</h4>
+        <h4 class="flex-column">No files to show in this repository.</h4>
     {% endif %}
 
 {% endblock main %}
