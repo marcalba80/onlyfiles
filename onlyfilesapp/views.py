@@ -63,7 +63,8 @@ def Init(request):
         
     }
     if request.user.is_authenticated:
-        context.update({"repos": User_Repository.objects.filter(userepo=UserRepo.objects.get(user=request.user))})
+        userr = User_Repository.objects.filter(userepo=UserRepo.objects.get(user=request.user))
+        if userr: context.update({"repos": userr})
     
     return render(request, template, context)
 
@@ -84,9 +85,10 @@ def Repo(request):
         user = UserRepo.objects.get(user=request.user)
         repos = User_Repository.objects.get(userepo=user, repository__name=reponame)
         if repos:
+            files = Files_Repository.objects.filter(repository=repos.repository)
             context.update(
                 {
-                "files": Files_Repository.objects.filter(repository=repos.repository),
+                "files": files if files else None,
                 "repo": repos.repository,
                 "is_admin": repos.user_admin,
                 }
