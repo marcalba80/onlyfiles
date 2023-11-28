@@ -1,2 +1,13 @@
 {% extends "base.html" %}
-{% block main %} {% endblock main %}
+{% block main %} 
+
+<form method="POST" action="">
+    {% csrf_token %}    
+
+    <label class="form-label" for="createRepo">Select a name for the repository</label>
+    {{form.name}}
+    <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Create it!"/>
+
+</form>
+
+{% endblock main %}

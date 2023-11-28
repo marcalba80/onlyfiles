@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+
+{% if is_admin %}
+
+<form method="POST" action="">
+    {% csrf_token %}    
+
+    <label class="form-label" for="customFile">Select a file</label>
+    {{ form.file }}        
+    <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Upload it"/>
+
+</form>
+
+{% else %}
+
+<p>You need to be admin to upload a file.</p>
+
+{% endif %}
+
+{% endblock main %}
