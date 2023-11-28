@@ -41,16 +41,18 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-    </div>
+  </div>
 </div>
 
 {% endif %}
 
 {% if user.is_authenticated %}
-{% comment %} {% if user.is_admin %} {% endcomment %}
-  <div class="d-flex gap-1 justify-content-center mt-2">
-    <div>Do you want to create a new repository?</div>
-    <a href="createRepository" class="text-decoration-none fw-semibold">Create it!</a>
+{% comment %} {% if user.is_admin %} {% endcomment %}  
+  <div class="mt-5">
+    <div class="d-flex gap-1 justify-content-center mt-2">
+      <div>Do you want to create a new repository?</div>
+      <a href="createRepository" class="text-decoration-none fw-semibold">Create it!</a>
+    </div>
   </div>
 {% comment %} {% endif %} {% endcomment %}
 
@@ -65,10 +67,16 @@
         </ul>
     </div>
   {% else %}
-    <h4>No repositories to show.</h4>
+    <div class="mt-3">
+      <h4>No repositories to show.</h4>
+    </div>
+    
   {% endif %}
 {% else %}
-    <h4>You need to log in to see your repositories.</h4>
+    <div class="mt-3">
+      <h4>You need to log in to see your repositories.</h4>
+    </div>
+    
 {% endif %}
 
 {% endblock main %}
