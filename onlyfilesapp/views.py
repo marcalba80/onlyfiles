@@ -160,25 +160,45 @@ def CreateRepo(request):
 
 @csrf_protect
 def AddUser(request):
-    template = 'addUser.html'
+    template = "addUser.html"
+    form = AddUserForm()
     context = {
-        "repo_name": request.GET.get('repo_name')
-        
+        "form": form,
     }
-    if request.method == 'POST':
-        adduser_name = request.POST.get('add_user')
-        repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-                                              userepo=request.user, user_admin=True)
-        repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
-                                              userepo__user__username=adduser_name)
-        if repos_admin and not repo_user:
-            repo_inst = repos_admin.repository
-            repouser_inst = User_Repository(userepo=UserRepo.objects.get(user__username=adduser_name),
-                                            repository=repo_inst, user_admin=False)
-            repouser_inst.save()
-        else:
-            pass
+    if request.user.is_authenticated:
+        repopk = request.GET.get('pk')
+        user = UserRepo.objects.get(user=request.user)
+        repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
+        if repos:
+            files = Files_Repository.objects.filter(repository=repos.repository)
+            context.update(
+                {
+                "repo": repos.repository,
+                "is_admin": repos.user_admin,
+                }
+            )
+        return render(request, template, context)
+    
     return render(request, template, context)
+    # template = 'addUser.html'
+    # context = {
+    #     "repo_name": request.GET.get('repo_name')
+        
+    # }
+    # if request.method == 'POST':
+    #     adduser_name = request.POST.get('add_user')
+    #     repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
+    #                                           userepo=request.user, user_admin=True)
+    #     repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
+    #                                           userepo__user__username=adduser_name)
+    #     if repos_admin and not repo_user:
+    #         repo_inst = repos_admin.repository
+    #         repouser_inst = User_Repository(userepo=UserRepo.objects.get(user__username=adduser_name),
+    #                                         repository=repo_inst, user_admin=False)
+    #         repouser_inst.save()
+    #     else:
+    #         pass
+    # return render(request, template, context)
 
 @csrf_protect
 def AddFile(request):
