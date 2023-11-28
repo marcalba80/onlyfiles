@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import FileResponse
-from rest_framework.generics import GenericAPIView
 from django.contrib.auth.decorators import login_required
 
 from onlyfilesapp.models import *
@@ -56,6 +55,14 @@ def Login(request):
 
     return render(request, 'login.html')
 
+def successoauth(request):
+    if request.user.is_authenticated:
+        userr = UserRepo.objects.filter(user=request.user)
+        if not userr:
+            userrepo = UserRepo(user=request.user, is_admin=False)
+            userrepo.save()
+    return redirect('home')
+
 def Logout(request):
 
     logout(request)
@@ -91,9 +98,11 @@ def Repo(request):
             
     }
     if request.user.is_authenticated:
+
         repopk = request.GET.get('pk')
         user = UserRepo.objects.get(user=request.user)
         repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
+        
         if repos:
             files = Files_Repository.objects.filter(repository=repos.repository)
             context.update(
@@ -126,18 +135,14 @@ def CreateRepo(request):
     if request.method == 'POST':
 
         repo_name = request.POST.get('name')
-        user_repo_instance = UserRepo.objects.get(user=request.user)
-        repo = User_Repository.objects.filter(repository__name=repo_name, 
-                                              userepo=user_repo_instance)
-        if repo:
-            # TODO: SEND MESSAGE REPO_NAME FOR THIS USER ALREADY EXISTS
-            pass
-        else:
+        user = UserRepo.objects.get(user=request.user)
+        repo = User_Repository.objects.filter(repository__name=repo_name, userepo=user)
+
+        if not repo:
             repo_inst = Repository(name=repo_name, master_key="")
             repo_inst.save()
-            repouser_inst = User_Repository(userepo=user_repo_instance, repository=repo_inst, user_admin=True)
+            repouser_inst = User_Repository(userepo=user, repository=repo_inst, user_admin=True)
             repouser_inst.save()
-
             return redirect('home')
             # TODO: SEND MESSAGE REPOSITORY CREATED
         
@@ -177,8 +182,6 @@ def AddUser(request):
                 "is_admin": repos.user_admin,
                 }
             )
-        return render(request, template, context)
-    
     return render(request, template, context)
     # template = 'addUser.html'
     # context = {
@@ -222,6 +225,7 @@ def AddFile(request):
         return render(request, template, context)
     
     return render(request, template, context)
+
     # template = 'Playlist/Playlists.html'
     # context = {
     #     "repo_name": request.GET.get('repo_name')
@@ -244,6 +248,3 @@ def AddFile(request):
     #         pass
     
     # return render(request, template, context)
-
-class SocialSignupAPIView(GenericAPIView):
-    pass
