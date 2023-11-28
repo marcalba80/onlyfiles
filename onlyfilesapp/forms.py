@@ -23,6 +23,6 @@ class CreateUserForm(UserCreationForm):
 class CreateRepoForm(forms.Form):
     name = forms.CharField(max_length=50)
 
-class UploadFileForm(forms.Form):
+class AddFileForm(forms.Form):
     title = forms.CharField(max_length=50)
-    file = forms.FileField()
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'accept': '.txt'}))

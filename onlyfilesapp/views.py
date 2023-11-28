@@ -91,10 +91,9 @@ def Repo(request):
             
     }
     if request.user.is_authenticated:
-        reponame = request.GET.get('repo')
-        print(reponame)
+        repopk = request.GET.get('pk')
         user = UserRepo.objects.get(user=request.user)
-        repos = User_Repository.objects.get(userepo=user, repository__name=reponame)
+        repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
         if repos:
             files = Files_Repository.objects.filter(repository=repos.repository)
             context.update(
@@ -149,15 +148,15 @@ def CreateRepo(request):
         
     return render(request, template, context)
 
-def uploadFile(request):
-    if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            request.FILES["file"]
-            return redirect('repository')
+# def uploadFile(request):
+#     if request.method == "POST":
+#         form = UploadFileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             request.FILES["file"]
+#             return redirect('repository')
     
-    form = UploadFileForm()
-    return render(request, "uploadFile.html", {"form": form})
+#     form = UploadFileForm()
+#     return render(request, "repository.html", {"form": form})
 
 @csrf_protect
 def AddUser(request):
@@ -183,28 +182,48 @@ def AddUser(request):
 
 @csrf_protect
 def AddFile(request):
-    template = 'Playlist/Playlists.html'
+    template = "addFile.html"
+    form = AddFileForm()
     context = {
-        "repo_name": request.GET.get('repo_name')
+        "form": form,
     }
-    if request.method == 'POST':
-        file_name = request.POST.get('file_name')
-        filec = request.POST.get('file')
-        repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-                                              userepo=request.user, user_admin=True)
-        repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
-                                              userepo__user__username=adduser_name)
-        repo_file = Files_Repository.objects.filter(repository__name=context['repo_name'], 
-                                              file__name=file_name)
-        if repos_admin and not repo_file:
-            file = Files(name=file_name, file=filec, cloud_id='')
-            file.save()
-            repofile_inst = Files_Repository(repository=repos_admin, file=file)
-            repofile_inst.save()
-        else:
-            pass
+    if request.user.is_authenticated:
+        repopk = request.GET.get('pk')
+        user = UserRepo.objects.get(user=request.user)
+        repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
+        if repos:
+            files = Files_Repository.objects.filter(repository=repos.repository)
+            context.update(
+                {
+                "repo": repos.repository,
+                "is_admin": repos.user_admin,
+                }
+            )
+        return render(request, template, context)
     
     return render(request, template, context)
+    # template = 'Playlist/Playlists.html'
+    # context = {
+    #     "repo_name": request.GET.get('repo_name')
+    # }
+    # if request.method == 'POST':
+    #     file_name = request.POST.get('file_name')
+    #     filec = request.POST.get('file')
+    #     repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
+    #                                           userepo=request.user, user_admin=True)
+    #     repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
+    #                                           userepo__user__username=adduser_name)
+    #     repo_file = Files_Repository.objects.filter(repository__name=context['repo_name'], 
+    #                                           file__name=file_name)
+    #     if repos_admin and not repo_file:
+    #         file = Files(name=file_name, file=filec, cloud_id='')
+    #         file.save()
+    #         repofile_inst = Files_Repository(repository=repos_admin, file=file)
+    #         repofile_inst.save()
+    #     else:
+    #         pass
+    
+    # return render(request, template, context)
 
 class SocialSignupAPIView(GenericAPIView):
     pass

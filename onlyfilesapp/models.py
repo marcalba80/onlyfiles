@@ -13,7 +13,7 @@ class UserRepo(models.Model):
 
 
 class Repository(models.Model):
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120)
     master_key = models.TextField(null=True)
 
     def __unicode__(self):
