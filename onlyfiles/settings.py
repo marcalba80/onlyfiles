@@ -97,6 +97,7 @@ SOCIALACCOUNT_PROVIDERS = {
         },
     }
 }
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 ROOT_URLCONF = 'onlyfiles.urls'
 
