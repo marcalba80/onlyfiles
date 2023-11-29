@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(9m@9!f6b-xv_$xp=84t+x=g)-a+x#7!p(dor7h9n)68&%@@s8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost"]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
@@ -85,7 +85,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-CSP_DEFAULT_SRC = ("'self'", "https://polyfill.io")
+CSP_DEFAULT_SRC = ("'self'", "https://localhost:8000")
 CSP_STYLE_SRC = ("'unsafe-inline'", "https:")
 
 SOCIALACCOUNT_PROVIDERS = {

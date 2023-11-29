@@ -126,7 +126,7 @@ def GetFile(request):
         response = FileResponse(file.file)
         response['Content-Type'] = 'text/plain'
         namef = str(file.file.name).split('_')
-        name = ''.join(namef[-2::-1])
+        name = '_'.join(namef[0:len(namef)-1])
         response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
         return response
 
