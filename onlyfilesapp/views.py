@@ -290,3 +290,48 @@ def AddFile(request):
     #         pass
     
     # return render(request, template, context)
+
+def DeleteRepo(request):
+
+    if request.user.is_authenticated:
+        repopk = request.GET.get('pk')
+        user = UserRepo.objects.get(user=request.user)
+        user_repository = User_Repository.objects.get(userepo=user, repository__pk=repopk)
+        print(user_repository)
+
+        if user_repository.user_admin:
+            repo = Repository.objects.get(pk=repopk)
+
+            files = Files_Repository.objects.filter(repository=user_repository.repository)
+
+            for file in files:
+                file.delete()
+
+            repo.delete()
+            users_repository = User_Repository.objects.filter(repository__pk=repopk)
+
+            for user_repo in users_repository:
+                user_repo.delete()
+
+        return redirect('home')
+    return redirect('home')
+
+
+def DeleteFile(request):
+    
+    if request.user.is_authenticated:
+        user = UserRepo.objects.get(user=request.user)
+        filepk = request.GET.get('pk')
+        file = Files.objects.get(pk=filepk)
+        file_repository = Files_Repository.objects.get(file=file)
+        repo = Repository.objects.get(pk=file_repository.repository.pk)
+
+        user_repository = User_Repository.objects.get(userepo=user, repository__pk=repo.pk)
+
+        if user_repository.user_admin:
+            file.delete()
+            file_repository.delete()
+
+        url = reverse('Repositories')
+        params = urllib.parse.urlencode({"pk": repo.pk})
+        return redirect(url + "?%s" % params)
