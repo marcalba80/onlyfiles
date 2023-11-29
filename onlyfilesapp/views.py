@@ -17,8 +17,8 @@ import urllib
 
 @csrf_protect
 def Register(request):
-    # if request.user.is_authenticated:
-    #     return redirect('home')
+    if request.user.is_authenticated:
+        return redirect('home')
 
     form = CreateUserForm()
 
@@ -39,8 +39,8 @@ def Register(request):
 
 @csrf_protect
 def Login(request):
-    # if request.user.is_authenticated:
-    #     return redirect('home')
+    if request.user.is_authenticated:
+        return redirect('home')
 
     if request.method == 'POST':
         username = request.POST.get('username')
