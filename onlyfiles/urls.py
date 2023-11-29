@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='onlyfilesapp/'), name='home'),
     # url(r'^admin/', admin.site.urls),
+    path('accounts/login/', views.Login, name='login'),
+    path('accounts/signup/', views.Register, name='signup'),
     path('accounts/', include('allauth.urls')),
     path('login', views.Login, name='login'),
     path('logout', views.Logout, name='logout'),

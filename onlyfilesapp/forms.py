@@ -27,5 +27,5 @@ class AddUserForm(forms.Form):
     username = forms.CharField(max_length=50)
 
 class AddFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
+    # title = forms.CharField(max_length=50)
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'accept': '.txt'}))
