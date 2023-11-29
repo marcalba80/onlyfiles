@@ -1,4 +1,14 @@
 {% extends "base.html" %}
+
+{% block createrep %}
+<a href="{% url 'createRepo' %}" class="nav-link">
+    <svg class="bi me-2" width="16" height="16">
+        <use xlink:href="#speedometer2" />
+    </svg>
+    Create a new repository
+</a>
+{% endblock %}
+
 {% block main %} 
 
 <form method="POST" action="">
