@@ -6,3 +6,4 @@ onlyfilesapp/migrations/*
 *.env
 .vscode/*
 **.pem
+*.sh

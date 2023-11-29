@@ -5,16 +5,12 @@
 
 {% if is_admin %}
 
-<form method="POST" action="">
-    {% csrf_token %}
-    
-    <div class="mt-5">
-        <label class="form-label" for="customFile">Select a file</label>
-        {{ form.file }}        
-        <a class="btn btn-info custom-bg-color mx-2" type="submit">Upload it</a>
-    </div>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}    
 
-    
+    <label name="file" class="form-label" for="customFile">Select a file</label>
+    {{ form.file }}        
+    <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Upload it"/>
 
 </form>
 
