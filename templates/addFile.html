@@ -3,6 +3,8 @@
 {% load static %}
 {% block main %}
 
+<div class="mt-5">
+
 {% if is_admin %}
 
 <form method="POST" action="" enctype="multipart/form-data">
@@ -10,7 +12,7 @@
 
     <label name="file" class="form-label" for="customFile">Select a file</label>
     {{ form.file }}        
-    <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Upload it"/>
+    <input class="btn btn-info custom-bg-color mx-2" type="submit" value="Upload it"/>
 
 </form>
 
@@ -19,5 +21,7 @@
 <p>You need to be admin to upload a file.</p>
 
 {% endif %}
+
+</div>
 
 {% endblock main %}

@@ -28,9 +28,6 @@
                     </div>
                 </div>
                 <input class="btn btn-info bg-cyan text-dark w-100 mt-4 fw-semibold shadow-sm" type="submit" value="Login"/>
-                {% comment %} <div class="btn btn-info text-white w-100 mt-4 fw-semibold shadow-sm">
-                    Login
-                </div> {% endcomment %}
             </form>
             <div class="d-flex gap-1 justify-content-center mt-1">
                 <div>Don't have an account?</div>
@@ -42,9 +39,10 @@
                 </div>
             </div>
             <div class="btn d-flex gap-2 justify-content-center border mt-3 shadow-sm">
-                <img src="{% static 'img/google_logo.png' %}" alt="google-icon" style="height: 1.6rem" />
-                <div class="fw-semibold text-secondary">Continue with Google</div>
-                <a href="{% provider_login_url "google" openid="https://accounts.google.com/o/oauth2/auth" next="/success/url/" %}">Google</a>
+                <a href="{% provider_login_url "google" openid="https://accounts.google.com/o/oauth2/auth" next="/success/url/" %}">
+                    <img src="{% static 'img/google_logo.png' %}" alt="google-icon" style="height: 1.6rem" />
+                    <div class="fw-semibold text-secondary">Continue with Google</div>
+                </a>
             </div>
         </div>
     
