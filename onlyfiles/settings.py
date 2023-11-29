@@ -62,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -75,6 +76,9 @@ AUTHENTICATION_BACKENDS = [
     # 'account.authentication.EmailAuthBackend'
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+CSP_DEFAULT_SRC = ("'self'", "https://polyfill.io")
+CSP_STYLE_SRC = ("'unsafe-inline'", "https:")
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
