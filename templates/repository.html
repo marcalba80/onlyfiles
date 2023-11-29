@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block subrep %}
+<a class="nav-link" style="margin-left: 1cm;">
+    <svg class="bi me-2" width="16" height="16">
+        <use xlink:href="#speedometer2" />
+    </svg>
+    {{ repo.name }}
+</a>
+{% endblock %}
+
 {% block main %}
 
     {% if is_admin %}
