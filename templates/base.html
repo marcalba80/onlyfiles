@@ -10,7 +10,10 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="icon" href="{% static 'img/of_icono.ico' %}" type="image/x-icon" />
     <style>
-        .custom-bg-color {background-color: #52a9ff;}
+        .custom-bg-color {
+            background-color: #52a9ff;
+            color: white;
+        }
     </style>
 </head>
 
@@ -31,11 +34,11 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link link-dark">
+                        <a href="./createRepository" class="nav-link link-dark">
                             <svg class="bi me-2" width="16" height="16">
                                 <use xlink:href="#speedometer2" />
                             </svg>
-                            Dashboard
+                            Create a new repository
                         </a>
                     </li>
                     <li>
@@ -48,7 +51,7 @@
                     </li>
                 </ul>                
                 <hr>
-            <div class="d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center justify-content-center" style=" color: #52a9ff; padding: 20px 0; font-size: 30px; font-family: Cheddar gothic; font-weight: bold;">
                 {{ user.username }}
             </div>
             </div>

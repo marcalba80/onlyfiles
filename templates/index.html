@@ -49,17 +49,19 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-{% comment %} {% if user.is_admin %} {% endcomment %}  
+{% comment %} {% if user.is_admin %} {% endcomment %} 
+  <!-----
   <div class="mt-5">
     <div class="d-flex gap-1 justify-content-center mt-2">
       <div>Do you want to create a new repository?</div>
       <a href="createRepository" class="text-decoration-none fw-semibold mb-3">Create it!</a>
     </div>
   </div>
+  --->
 {% comment %} {% endif %} {% endcomment %}
 
   {% if repos %}
-    <div id="Card" class="card">
+    <div id="Card" class="card mt-5">
         <ul class="list-group list-group-flush">
             {% for repo in repos %}
                 <li class="list-group-item">
@@ -69,8 +71,9 @@
                     </svg>
                     <a id="List" href="repository?pk={{ repo.repository.pk }}" name="repository" style="text-decoration: none; color: #52A9FF;">
                     {{ repo.repository.name }}
-                  </a>
-                </h5></li>
+                    </a>
+                  </h5>
+                </li>
             {% endfor %}
         </ul>
     </div>
