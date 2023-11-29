@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import FileResponse
@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
+
+import urllib
 
 # Create your views here.
 
@@ -144,7 +146,6 @@ def CreateRepo(request):
             repouser_inst = User_Repository(userepo=user, repository=repo_inst, user_admin=True)
             repouser_inst.save()
             return redirect('home')
-            # TODO: SEND MESSAGE REPOSITORY CREATED
         
     form = CreateRepoForm()
     context = {
@@ -166,22 +167,46 @@ def CreateRepo(request):
 @csrf_protect
 def AddUser(request):
     template = "addUser.html"
+    repopk = request.GET.get('pk')
+    user = UserRepo.objects.get(user=request.user)
+    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        userradd = UserRepo.objects.get(user__username=username)
+        repos_admin = User_Repository.objects.get(repository__pk=repopk, 
+                                              userepo=user, user_admin=True)
+        repo_user = User_Repository.objects.filter(repository__pk=repopk, 
+                                              userepo=userradd)
+        if repos_admin and not repo_user:
+            repo_inst = repos_admin.repository
+            if userradd:
+                repouser_inst = User_Repository(userepo=userradd,
+                                                repository=repo_inst, user_admin=False)
+                repouser_inst.save()
+                url = reverse('Repositories')
+                params = urllib.parse.urlencode({"pk": repopk})
+                return redirect(url + "?%s" % params)
+                # return Repo(request)
+            else:
+                messages.error(request, "User doesn't exist")
+        else:
+            messages.error(request, "User already in the repository")
+     
     form = AddUserForm()
     context = {
         "form": form,
-    }
-    if request.user.is_authenticated:
-        repopk = request.GET.get('pk')
-        user = UserRepo.objects.get(user=request.user)
+    }   
+    if request.user.is_authenticated:            
         repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
         if repos:
-            files = Files_Repository.objects.filter(repository=repos.repository)
+            # files = Files_Repository.objects.filter(repository=repos.repository)
             context.update(
                 {
-                "repo": repos.repository,
+                # "repo": repos.repository,
                 "is_admin": repos.user_admin,
                 }
             )
+    
     return render(request, template, context)
     # template = 'addUser.html'
     # context = {
@@ -210,19 +235,34 @@ def AddFile(request):
     context = {
         "form": form,
     }
+        
     if request.user.is_authenticated:
         repopk = request.GET.get('pk')
         user = UserRepo.objects.get(user=request.user)
         repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
         if repos:
-            files = Files_Repository.objects.filter(repository=repos.repository)
+            # files = Files_Repository.objects.filter(repository=repos.repository)
             context.update(
                 {
-                "repo": repos.repository,
+                # "repo": repos.repository,
                 "is_admin": repos.user_admin,
                 }
             )
-        return render(request, template, context)
+        
+        if request.method == "POST":
+            form = AddFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                # print(form.title)
+                f = request.FILES['file']
+                file = Files(name=f.name, file=f)
+                file.save()
+                repof = Files_Repository(repository=repos.repository, file=file)
+                repof.save()
+                # for chunk in f.chunks():
+                #     print(chunk)
+                url = reverse('Repositories')
+                params = urllib.parse.urlencode({"pk": repopk})
+                return redirect(url + "?%s" % params)
     
     return render(request, template, context)
 

@@ -41,9 +41,10 @@ class User_Repository(models.Model):
     
 
 class Files(models.Model):
-    name = models.CharField(max_length=120, unique=True)
+    name = models.CharField(max_length=120)
     cloud_id = models.TextField(null=True)
-    file = models.TextField(default="Test")
+    file_text = models.TextField(default="Test")
+    file = models.FileField()
 
     def __unicode__(self):
         return u"%s" % self.name

@@ -65,6 +65,11 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+FILE_UPLOAD_HANDLERS = [
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', # This is the default that allows us to log in via username
     # 'account.authentication.EmailAuthBackend'
