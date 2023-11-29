@@ -256,6 +256,12 @@ def AddFile(request):
             if form.is_valid():
                 # print(form.title)
                 f = request.FILES['file']
+
+                if not f.name.endswith('.txt'):
+                    url = reverse('Repositories')
+                    params = urllib.parse.urlencode({"pk": repopk})
+                    return redirect(url + "?%s" % params)
+
                 file = Files(name=f.name, file=f)
                 file.save()
                 repof = Files_Repository(repository=repos.repository, file=file)
