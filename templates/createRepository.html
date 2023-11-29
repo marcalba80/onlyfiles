@@ -2,11 +2,15 @@
 {% block main %} 
 
 <form method="POST" action="">
-    {% csrf_token %}    
+    {% csrf_token %}
+    
+    <div class="mt-5">
+        <label class="form-label" for="createRepo">Select a name for the repository</label>
+        {{form.name}}
+        <input class="btn btn-info custom-bg-color text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Create it!"/>
+    </div>
 
-    <label class="form-label" for="createRepo">Select a name for the repository</label>
-    {{form.name}}
-    <input class="btn btn-info bg-cyan text-dark w-50 mt-4 fw-semibold shadow-sm" type="submit" value="Create it!"/>
+    
 
 </form>
 
