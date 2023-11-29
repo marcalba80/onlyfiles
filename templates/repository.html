@@ -17,8 +17,7 @@
         <div>
             <h4 class="flex-column" style="color: #52a9ff;">{{ repo.name }}</h4>
         </div>
-        <div id="Card" class="flex-column card">
-            
+        <div id="Card" class="flex-column card mb-5">            
             <ul class="list-group list-group-flush">
                 {% for file in files %}
                     <li class="list-group-item">
@@ -33,7 +32,7 @@
             </ul>
         </div>
     {% else %}
-        <h4 class="flex-column">No files to show in this repository.</h4>
+        <h4 class="flex-column mt-5">No files to show in this repository.</h4>
     {% endif %}
 
 {% endblock main %}
