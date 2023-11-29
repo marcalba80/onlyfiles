@@ -22,7 +22,7 @@ from django.views.generic import RedirectView
 from onlyfilesapp import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('shoronpo/', admin.site.urls),
     path('', RedirectView.as_view(url='onlyfilesapp/'), name='home'),
     # url(r'^admin/', admin.site.urls),
     path('accounts/login/', views.Login, name='login'),

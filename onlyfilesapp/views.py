@@ -125,7 +125,9 @@ def GetFile(request):
     if userepo:
         response = FileResponse(file.file)
         response['Content-Type'] = 'text/plain'
-        response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(pk) # You can set custom filename, which will be visible for clients.
+        namef = str(file.file.name).split('_')
+        name = ''.join(namef[-2::-1])
+        response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
         return response
 
 # def download(request, pk):
