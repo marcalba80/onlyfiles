@@ -34,11 +34,11 @@
                 <a href="/signup" class="text-decoration-none fw-semibold">Register</a>
             </div>
             <div class="p-3 align-items-center justify-content-center">
-                <div class="border-bottom w-100 text-center" style="height: 0.9rem">
+                <div class="border-bottom w-50 text-center" style="height: 0.5rem">
                     <span class="bg-white px-3">or</span>
                 </div>
             </div>
-            <div class="btn d-flex gap-2 justify-content-center border mt-3 shadow-sm">
+            <div class="btn d-flex gap-2 justify-content-center border mt-3 shadow-sm" style="width: 30rem; ">
                 <a href="{% provider_login_url "google" openid="https://accounts.google.com/o/oauth2/auth" next="/success/url/" %}">
                     <img src="{% static 'img/google_logo.png' %}" alt="google-icon" style="height: 1.6rem" />
                     <div class="fw-semibold text-secondary">Continue with Google</div>
