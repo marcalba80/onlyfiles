@@ -303,7 +303,6 @@ def DeleteRepo(request):
         repopk = request.GET.get('pk')
         user = UserRepo.objects.get(user=request.user)
         user_repository = User_Repository.objects.get(userepo=user, repository__pk=repopk)
-        print(user_repository)
 
         if user_repository.user_admin:
             repo = Repository.objects.get(pk=repopk)
