@@ -140,7 +140,7 @@ def CreateRepo(request):
 
         repo_name = request.POST.get('name')
         user = UserRepo.objects.get(user=request.user)
-        repo = User_Repository.objects.filter(repository__name=repo_name, userepo=user)
+        repo = User_Repository.objects.filter(repository__name=repo_name, userepo=user, user_admin=True)
 
         if not repo:
             repo_inst = Repository(name=repo_name, master_key="")
@@ -148,6 +148,8 @@ def CreateRepo(request):
             repouser_inst = User_Repository(userepo=user, repository=repo_inst, user_admin=True)
             repouser_inst.save()
             return redirect('home')
+        else:
+            messages.error(request, "Repository already exists")
         
     form = CreateRepoForm()
     context = {
@@ -174,12 +176,16 @@ def AddUser(request):
     
     if request.method == "POST":
         username = request.POST.get('username')
-        userradd = UserRepo.objects.get(user__username=username)
         repos_admin = User_Repository.objects.get(repository__pk=repopk, 
                                               userepo=user, user_admin=True)
-        repo_user = User_Repository.objects.filter(repository__pk=repopk, 
-                                              userepo=userradd)
-        if useradd and repos_admin and not repo_user:
+        try:
+            userradd = UserRepo.objects.get(user__username=username)
+            repo_user = User_Repository.objects.get(repository__pk=repopk, userepo=userradd)
+        except:
+            useradd = None
+            repo_user = None
+            
+        if userradd and repos_admin and not repo_user:
             repo_inst = repos_admin.repository
             if userradd:
                 repouser_inst = User_Repository(userepo=userradd,
@@ -192,7 +198,7 @@ def AddUser(request):
             else:
                 messages.error(request, "User doesn't exist")
         else:
-            messages.error(request, "User already in the repository")
+            messages.error(request, "User does not exist or already in the repository")
      
     form = AddUserForm()
     context = {
