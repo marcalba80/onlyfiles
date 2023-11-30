@@ -179,7 +179,7 @@ def AddUser(request):
                                               userepo=user, user_admin=True)
         repo_user = User_Repository.objects.filter(repository__pk=repopk, 
                                               userepo=userradd)
-        if repos_admin and not repo_user:
+        if useradd and repos_admin and not repo_user:
             repo_inst = repos_admin.repository
             if userradd:
                 repouser_inst = User_Repository(userepo=userradd,
