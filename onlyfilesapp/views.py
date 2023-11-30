@@ -174,32 +174,6 @@ def AddUser(request):
     repopk = request.GET.get('pk')
     user = UserRepo.objects.get(user=request.user)
     
-    if request.method == "POST":
-        username = request.POST.get('username')
-        repos_admin = User_Repository.objects.get(repository__pk=repopk, 
-                                              userepo=user, user_admin=True)
-        try:
-            userradd = UserRepo.objects.get(user__username=username)
-            repo_user = User_Repository.objects.get(repository__pk=repopk, userepo=userradd)
-        except:
-            useradd = None
-            repo_user = None
-            
-        if userradd and repos_admin and not repo_user:
-            repo_inst = repos_admin.repository
-            if userradd:
-                repouser_inst = User_Repository(userepo=userradd,
-                                                repository=repo_inst, user_admin=False)
-                repouser_inst.save()
-                url = reverse('Repositories')
-                params = urllib.parse.urlencode({"pk": repopk})
-                return redirect(url + "?%s" % params)
-                # return Repo(request)
-            else:
-                messages.error(request, "User doesn't exist")
-        else:
-            messages.error(request, "User does not exist or already in the repository")
-     
     form = AddUserForm()
     context = {
         "form": form,
@@ -214,6 +188,30 @@ def AddUser(request):
                 "is_admin": repos.user_admin,
                 }
             )
+    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        repos_admin = User_Repository.objects.get(repository__pk=repopk, 
+                                              userepo=user, user_admin=True)
+        try:
+            userradd = UserRepo.objects.get(user__username=username)
+            repo_user = User_Repository.objects.get(repository__pk=repopk, userepo=userradd)
+        except:
+            useradd = None
+            repo_user = None
+
+        if not userradd: messages.error(request, "User does not exists")
+        if repo_user: messages.error(request, "User already in the repository")
+    
+        if userradd and repos_admin and not repo_user:
+            repo_inst = repos_admin.repository
+            repouser_inst = User_Repository(userepo=userradd,
+                                            repository=repo_inst, user_admin=False)
+            repouser_inst.save()
+            url = reverse('Repositories')
+            params = urllib.parse.urlencode({"pk": repopk})
+            return redirect(url + "?%s" % params)
+            # return Repo(request)
     
     return render(request, template, context)
     # template = 'addUser.html'
