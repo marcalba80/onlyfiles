@@ -38,6 +38,24 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_HSTS_SECONDS = 3600
 
+CSP_DEFAULT_SRC = ["'none'"]
+CSP_SCRIPT_SRC = [
+    "'self'",
+    "'unsafe-inline'",
+    'https://localhost:8000',
+    "https://stackpath.bootstrapcdn.com",
+    "https://cdn.jsdelivr.net",
+    "https://code.jquery.com"
+]
+CSP_STYLE_SRC = ["'self'", 'https://localhost:8000', "'unsafe-inline'", "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"]
+CSP_IMG_SRC = [
+    "'self'",
+]
+CSP_FRAME_SRC = ["'self'"]
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+# CSP_REPORT_URI = ["http://localhost:8000/"]
+# CSP_REPORT_ONLY = True
+
 # CSP_DEFAULT_SRC = ("'none'",)
 # CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')
 # CSP_SCRIPT_SRC = ("'self'",)
@@ -55,6 +73,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'oauth2_provider',
     'django_extensions',
+    'csp',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -85,8 +104,10 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-CSP_DEFAULT_SRC = ("'self'", "https://localhost:8000")
-CSP_STYLE_SRC = ("'unsafe-inline'", "https:")
+# CSP_DEFAULT_SRC = ("'self'",)
+# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", 'https://localhost:8000')
+# CSP_SCRIPT_SRC = ("'self'", 'https://localhost:8000')
+# CSP_IMG_SRC = ("'self'", 'data:', 'https://localhost:8000')
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
