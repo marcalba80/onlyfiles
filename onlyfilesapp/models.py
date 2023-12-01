@@ -46,6 +46,10 @@ class Files(models.Model):
     file_rand = models.TextField(null=True)
     # file = models.FileField()
 
+    def delete(self):
+        self.file.delete()
+        super().delete()
+
     def __unicode__(self):
         return u"%s" % self.name
     

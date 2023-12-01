@@ -7,3 +7,4 @@ pyOpenSSL
 django-csp
 firebase_admin
 django-dotenv
+magic

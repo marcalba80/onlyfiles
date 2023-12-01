@@ -7,12 +7,14 @@ from django.views.generic import CreateView
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import FileResponse
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
 from onlyfilesapp.firebase import FIREBASE_BUCKET
 
 import urllib, os
+import magic
 
 # Create your views here.
 
@@ -207,6 +209,11 @@ def AddUser(request):
     
     return render(request, template, context)
 
+def validate_file_mimetype(file):
+    accept = ['text/plain']
+    file_mime_type = magic.from_buffer(file.read(1024), mime=True)
+    return True if file_mime_type in accept else False
+
 @csrf_protect
 def AddFile(request):
     template = "addFile.html"
@@ -234,10 +241,10 @@ def AddFile(request):
                 # print(form.title)
                 f = request.FILES['file']
 
-                if not f.name.endswith('.txt'):
-                    url = reverse('Repositories')
-                    params = urllib.parse.urlencode({"pk": repopk})
-                    return redirect(url + "?%s" % params)
+                if not f.name.endswith('.txt') or not validate_file_mimetype(f):
+                    messages.error(request, "Unsupported file type")
+                    context.update({'pk': repopk})
+                    return render(request, template, context)
 
                 blob = FIREBASE_BUCKET.blob(repopk + "/" + f.name)
                 blob.upload_from_file(f.file, content_type=f.content_type)
