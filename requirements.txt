@@ -3,8 +3,8 @@ requests
 django-allauth
 django-extensions
 Werkzeug
-secrets
 cryptography
 django-csp
-firebase-admin
+firebase_admin
+django-dotenv
 magic
