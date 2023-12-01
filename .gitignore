@@ -7,4 +7,5 @@ onlyfilesapp/migrations/*
 .vscode/*
 **.pem
 *.sh
-*.txt
+*_*.txt
+tmp/*

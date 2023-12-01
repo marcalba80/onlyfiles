@@ -11,8 +11,9 @@ from django.core.exceptions import ValidationError
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
+from onlyfilesapp.firebase import FIREBASE_BUCKET
 
-import urllib
+import urllib, os
 import magic
 
 # Create your views here.
@@ -88,13 +89,6 @@ def Init(request):
     
     return render(request, template, context)
 
-# def Repo(request):
-#     template = 'repository.html'
-#     context = {
-#         "repos": User_Repository.objects.filter(userepo=request.user),
-#     }
-#     return render(request, template, context)
-
 @login_required(login_url='login')
 def Repo(request):
     template = 'repository.html'
@@ -125,15 +119,23 @@ def GetFile(request):
     filerepo = Files_Repository.objects.get(file=file)
     userepo = User_Repository.objects.get(userepo=userr, repository=filerepo.repository)
     if userepo:
-        response = FileResponse(file.file)
+        blob = FIREBASE_BUCKET.blob(str(filerepo.repository.pk) + "/" + file.name)
+        
+        fcloud = open("./tmp/" + file.name, "wb")
+        blob.download_to_file(fcloud)
+        fcloud.close()
+        fcloud = open("./tmp/" + file.name, "rb")
+        # print(fcloud)
+        # response = FileResponse(file.file)
+        response = FileResponse(fcloud)
         response['Content-Type'] = 'text/plain'
-        namef = str(file.file.name).split('_')
-        name = '_'.join(namef[0:len(namef)-1])
-        response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
+        # namef = str(file.file.name).split('_')
+        # name = '_'.join(namef[0:len(namef)-1])
+        # response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.name) # You can set custom filename, which will be visible for clients.
+        # fcloud.close()
+        # os.remove("./tmp/" + file.name)
         return response
-
-# def download(request, pk):
-#     pass
 
 @csrf_protect
 def CreateRepo(request):
@@ -159,16 +161,6 @@ def CreateRepo(request):
     }
         
     return render(request, template, context)
-
-# def uploadFile(request):
-#     if request.method == "POST":
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             request.FILES["file"]
-#             return redirect('repository')
-    
-#     form = UploadFileForm()
-#     return render(request, "repository.html", {"form": form})
 
 @csrf_protect
 def AddUser(request):
@@ -216,25 +208,6 @@ def AddUser(request):
             # return Repo(request)
     
     return render(request, template, context)
-    # template = 'addUser.html'
-    # context = {
-    #     "repo_name": request.GET.get('repo_name')
-        
-    # }
-    # if request.method == 'POST':
-    #     adduser_name = request.POST.get('add_user')
-    #     repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-    #                                           userepo=request.user, user_admin=True)
-    #     repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
-    #                                           userepo__user__username=adduser_name)
-    #     if repos_admin and not repo_user:
-    #         repo_inst = repos_admin.repository
-    #         repouser_inst = User_Repository(userepo=UserRepo.objects.get(user__username=adduser_name),
-    #                                         repository=repo_inst, user_admin=False)
-    #         repouser_inst.save()
-    #     else:
-    #         pass
-    # return render(request, template, context)
 
 def validate_file_mimetype(file):
     accept = ['text/plain']
@@ -273,40 +246,21 @@ def AddFile(request):
                     context.update({'pk': repopk})
                     return render(request, template, context)
 
-                file = Files(name=f.name, file=f)
+                blob = FIREBASE_BUCKET.blob(repopk + "/" + f.name)
+                blob.upload_from_file(f.file, content_type=f.content_type)
+                
+                # file = Files(name=f.name, file=f, cloud_url=blob.public_url)
+                file = Files(name=f.name, cloud_url=blob.public_url)
                 file.save()
                 repof = Files_Repository(repository=repos.repository, file=file)
                 repof.save()
-                # for chunk in f.chunks():
-                #     print(chunk)
+                
                 url = reverse('Repositories')
                 params = urllib.parse.urlencode({"pk": repopk})
                 return redirect(url + "?%s" % params)
     
     return render(request, template, context)
 
-    # template = 'Playlist/Playlists.html'
-    # context = {
-    #     "repo_name": request.GET.get('repo_name')
-    # }
-    # if request.method == 'POST':
-    #     file_name = request.POST.get('file_name')
-    #     filec = request.POST.get('file')
-    #     repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-    #                                           userepo=request.user, user_admin=True)
-    #     repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
-    #                                           userepo__user__username=adduser_name)
-    #     repo_file = Files_Repository.objects.filter(repository__name=context['repo_name'], 
-    #                                           file__name=file_name)
-    #     if repos_admin and not repo_file:
-    #         file = Files(name=file_name, file=filec, cloud_id='')
-    #         file.save()
-    #         repofile_inst = Files_Repository(repository=repos_admin, file=file)
-    #         repofile_inst.save()
-    #     else:
-    #         pass
-    
-    # return render(request, template, context)
 
 def DeleteRepo(request):
 
