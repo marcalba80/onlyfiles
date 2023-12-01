@@ -11,9 +11,11 @@ from django.core.exceptions import ValidationError
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
+from onlyfilesapp.crypto import *
 
 import urllib
 import magic
+import uuid
 
 # Create your views here.
 
@@ -121,19 +123,18 @@ def Repo(request):
 def GetFile(request):
     pk = request.GET.get('pk')
     userr = UserRepo.objects.get(user=request.user)
-    file = Files.objects.get(pk=pk)
-    filerepo = Files_Repository.objects.get(file=file)
+    file_instance = Files.objects.get(pk=pk)
+    filerepo = Files_Repository.objects.get(file=file_instance)
     userepo = User_Repository.objects.get(userepo=userr, repository=filerepo.repository)
-    if userepo:
-        response = FileResponse(file.file)
+    if userepo and file_instance:
+        print(f"Get file name: {file_instance.name}")
+        dec_file = decrypt_file(filerepo.repository.master_key, salt=file_instance.identifier.bytes, info=filerepo.repository.identifier.bytes, tag=file_instance.tag, file=file_instance.file)
+        response = FileResponse(dec_file)
         response['Content-Type'] = 'text/plain'
-        namef = str(file.file.name).split('_')
+        namef = str(file_instance.file.name).split('_')
         name = '_'.join(namef[0:len(namef)-1])
         response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
         return response
-
-# def download(request, pk):
-#     pass
 
 @csrf_protect
 def CreateRepo(request):
@@ -145,7 +146,7 @@ def CreateRepo(request):
         repo = User_Repository.objects.filter(repository__name=repo_name, userepo=user, user_admin=True)
 
         if not repo:
-            repo_inst = Repository(name=repo_name, master_key="")
+            repo_inst = Repository(name=repo_name, master_key=generate_master_key_repository())
             repo_inst.save()
             repouser_inst = User_Repository(userepo=user, repository=repo_inst, user_admin=True)
             repouser_inst.save()
@@ -273,9 +274,15 @@ def AddFile(request):
                     context.update({'pk': repopk})
                     return render(request, template, context)
 
-                file = Files(name=f.name, file=f)
-                file.save()
-                repof = Files_Repository(repository=repos.repository, file=file)
+                repo = Repository.objects.get(pk=repopk)
+                file_identifier = uuid.uuid4()
+                enc_f, tag = encrypt_file(repo.master_key, salt=file_identifier.bytes, info=repo.identifier.bytes, file=f)
+
+                file_instance = Files(name=f.name, identifier=file_identifier, tag=tag)
+                file_instance.save()
+                file_instance.file.save(f.name, enc_f)
+
+                repof = Files_Repository(repository=repos.repository, file=file_instance)
                 repof.save()
                 # for chunk in f.chunks():
                 #     print(chunk)

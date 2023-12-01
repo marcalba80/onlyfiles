@@ -3,7 +3,8 @@ requests
 django-allauth
 django-extensions
 Werkzeug
-pyOpenSSL
+secrets
+cryptography
 django-csp
 firebase-admin
 magic
