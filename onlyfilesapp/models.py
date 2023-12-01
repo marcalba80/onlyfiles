@@ -24,7 +24,7 @@ class Repository(models.Model):
         return u"%s" % self.name
     
     def __str__(self):
-        return self.name
+        return self.name + ":" + str(self.pk)
     
     
 
@@ -37,14 +37,14 @@ class User_Repository(models.Model):
         return u"%s" % self.userepo.name + u" - %s" % self.repository.name
     
     def __str__(self):
-        return self.userepo.user.username + "-" + self.repository.name
+        return self.userepo.user.username + "-" + self.repository.name + ":" + str(self.repository.pk)
     
 
 class Files(models.Model):
     name = models.CharField(max_length=120)
-    cloud_id = models.TextField(null=True)
-    file_text = models.TextField(default="Test")
-    file = models.FileField()
+    cloud_url = models.TextField(null=True)
+    file_rand = models.TextField(null=True)
+    # file = models.FileField()
 
     def __unicode__(self):
         return u"%s" % self.name

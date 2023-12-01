@@ -10,8 +10,9 @@ from django.contrib.auth.decorators import login_required
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
+from onlyfilesapp.firebase import FIREBASE_BUCKET
 
-import urllib
+import urllib, os
 
 # Create your views here.
 
@@ -123,11 +124,22 @@ def GetFile(request):
     filerepo = Files_Repository.objects.get(file=file)
     userepo = User_Repository.objects.get(userepo=userr, repository=filerepo.repository)
     if userepo:
-        response = FileResponse(file.file)
+        blob = FIREBASE_BUCKET.blob(str(filerepo.repository.pk) + "/" + file.name)
+        
+        fcloud = open("./tmp/" + file.name, "wb")
+        blob.download_to_file(fcloud)
+        fcloud.close()
+        fcloud = open("./tmp/" + file.name, "rb")
+        # print(fcloud)
+        # response = FileResponse(file.file)
+        response = FileResponse(fcloud)
         response['Content-Type'] = 'text/plain'
-        namef = str(file.file.name).split('_')
-        name = '_'.join(namef[0:len(namef)-1])
-        response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
+        # namef = str(file.file.name).split('_')
+        # name = '_'.join(namef[0:len(namef)-1])
+        # response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.name) # You can set custom filename, which will be visible for clients.
+        # fcloud.close()
+        # os.remove("./tmp/" + file.name)
         return response
 
 # def download(request, pk):
@@ -266,12 +278,15 @@ def AddFile(request):
                     params = urllib.parse.urlencode({"pk": repopk})
                     return redirect(url + "?%s" % params)
 
-                file = Files(name=f.name, file=f)
+                blob = FIREBASE_BUCKET.blob(repopk + "/" + f.name)
+                blob.upload_from_file(f.file, content_type=f.content_type)
+                
+                # file = Files(name=f.name, file=f, cloud_url=blob.public_url)
+                file = Files(name=f.name, cloud_url=blob.public_url)
                 file.save()
                 repof = Files_Repository(repository=repos.repository, file=file)
                 repof.save()
-                # for chunk in f.chunks():
-                #     print(chunk)
+                
                 url = reverse('Repositories')
                 params = urllib.parse.urlencode({"pk": repopk})
                 return redirect(url + "?%s" % params)

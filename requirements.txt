@@ -5,4 +5,5 @@ django-extensions
 Werkzeug
 pyOpenSSL
 django-csp
-firebase-admin
+firebase_admin
+django-dotenv
