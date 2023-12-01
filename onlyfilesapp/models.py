@@ -46,6 +46,10 @@ class Files(models.Model):
     file_text = models.TextField(default="Test")
     file = models.FileField()
 
+    def delete(self):
+        self.file.delete()
+        super().delete()
+
     def __unicode__(self):
         return u"%s" % self.name
     

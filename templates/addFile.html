@@ -7,6 +7,10 @@
 
 {% if is_admin %}
 
+{% for message in messages %}
+    <p id="messages" class="text-danger">{{message}}</p>
+{% endfor %}
+
 <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}    
 
