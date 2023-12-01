@@ -87,13 +87,6 @@ def Init(request):
     
     return render(request, template, context)
 
-# def Repo(request):
-#     template = 'repository.html'
-#     context = {
-#         "repos": User_Repository.objects.filter(userepo=request.user),
-#     }
-#     return render(request, template, context)
-
 @login_required(login_url='login')
 def Repo(request):
     template = 'repository.html'
@@ -142,9 +135,6 @@ def GetFile(request):
         # os.remove("./tmp/" + file.name)
         return response
 
-# def download(request, pk):
-#     pass
-
 @csrf_protect
 def CreateRepo(request):
     template = 'createRepository.html'
@@ -169,16 +159,6 @@ def CreateRepo(request):
     }
         
     return render(request, template, context)
-
-# def uploadFile(request):
-#     if request.method == "POST":
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             request.FILES["file"]
-#             return redirect('repository')
-    
-#     form = UploadFileForm()
-#     return render(request, "repository.html", {"form": form})
 
 @csrf_protect
 def AddUser(request):
@@ -226,25 +206,6 @@ def AddUser(request):
             # return Repo(request)
     
     return render(request, template, context)
-    # template = 'addUser.html'
-    # context = {
-    #     "repo_name": request.GET.get('repo_name')
-        
-    # }
-    # if request.method == 'POST':
-    #     adduser_name = request.POST.get('add_user')
-    #     repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-    #                                           userepo=request.user, user_admin=True)
-    #     repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
-    #                                           userepo__user__username=adduser_name)
-    #     if repos_admin and not repo_user:
-    #         repo_inst = repos_admin.repository
-    #         repouser_inst = User_Repository(userepo=UserRepo.objects.get(user__username=adduser_name),
-    #                                         repository=repo_inst, user_admin=False)
-    #         repouser_inst.save()
-    #     else:
-    #         pass
-    # return render(request, template, context)
 
 @csrf_protect
 def AddFile(request):
@@ -293,28 +254,6 @@ def AddFile(request):
     
     return render(request, template, context)
 
-    # template = 'Playlist/Playlists.html'
-    # context = {
-    #     "repo_name": request.GET.get('repo_name')
-    # }
-    # if request.method == 'POST':
-    #     file_name = request.POST.get('file_name')
-    #     filec = request.POST.get('file')
-    #     repos_admin = User_Repository.objects.get(repository__name=context['repo_name'], 
-    #                                           userepo=request.user, user_admin=True)
-    #     repo_user = User_Repository.objects.filter(repository__name=context['repo_name'], 
-    #                                           userepo__user__username=adduser_name)
-    #     repo_file = Files_Repository.objects.filter(repository__name=context['repo_name'], 
-    #                                           file__name=file_name)
-    #     if repos_admin and not repo_file:
-    #         file = Files(name=file_name, file=filec, cloud_id='')
-    #         file.save()
-    #         repofile_inst = Files_Repository(repository=repos_admin, file=file)
-    #         repofile_inst.save()
-    #     else:
-    #         pass
-    
-    # return render(request, template, context)
 
 def DeleteRepo(request):
 
