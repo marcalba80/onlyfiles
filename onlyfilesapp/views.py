@@ -128,15 +128,16 @@ def GetFile(request):
         blob.download_to_file(fcloud)
         fcloud.close()
         fcloud = open("./tmp/" + file_instance.name, "rb")
-        # dec_file = decrypt_file(filerepo.repository.master_key, salt=file_instance.identifier.bytes, info=filerepo.repository.identifier.bytes, tag=file_instance.tag, file=file_instance.file)
+        
+        dec_file = decrypt_file(filerepo.repository.master_key, salt=file_instance.identifier.bytes, info=filerepo.repository.identifier.bytes, tag=file_instance.tag, file=fcloud)
         # print(fcloud)
         # response = FileResponse(file_instance.file)
-        response = FileResponse(fcloud)
+        response = FileResponse(dec_file)
         response['Content-Type'] = 'text/plain'
         # namef = str(file.file.name).split('_')
         # name = '_'.join(namef[0:len(namef)-1])
         # response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
-        response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.name) # You can set custom filename, which will be visible for clients.
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_instance.name) # You can set custom filename, which will be visible for clients.
         # fcloud.close()
         # os.remove("./tmp/" + file.name)
         return response
