@@ -122,12 +122,15 @@ def GetFile(request):
     userepo = User_Repository.objects.get(userepo=userr, repository=filerepo.repository)
 
     if userepo and file_instance:
-        blob = FIREBASE_BUCKET.blob(str(filerepo.repository.pk) + "/" + file_instance.name)
+        enc_name = file_instance.name.replace(".txt", ".enc")
+        print(f"File name: {file_instance.name}")
+        print(f"Enc name: {enc_name}")
+        blob = FIREBASE_BUCKET.blob(str(filerepo.repository.pk) + "/" + enc_name)
         
-        fcloud = open("./tmp/" + file_instance.name, "wb")
+        fcloud = open("./tmp/" + enc_name, "wb")
         blob.download_to_file(fcloud)
         fcloud.close()
-        fcloud = open("./tmp/" + file_instance.name, "rb")
+        fcloud = open("./tmp/" + enc_name, "rb")
         dec_file = decrypt_file(filerepo.repository.master_key, salt=file_instance.identifier.bytes, info=filerepo.repository.identifier.bytes, tag=file_instance.tag, file=fcloud)
         # print(fcloud)
         # response = FileResponse(file_instance.file)
@@ -259,7 +262,8 @@ def AddFile(request):
                 # file_instance.file.save(f.name, enc_f)
                 # repof = Files_Repository(repository=repos.repository, file=file_instance)
                 
-                blob = FIREBASE_BUCKET.blob(repopk + "/" + f.name)
+                enc_name = f.name.replace(".txt", ".enc")
+                blob = FIREBASE_BUCKET.blob(repopk + "/" + enc_name)
                 blob.upload_from_file(enc_f, content_type=f.content_type)
                 
                 # file = Files(name=f.name, file=f, cloud_url=blob.public_url)
