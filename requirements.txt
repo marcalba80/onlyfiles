@@ -3,7 +3,7 @@ requests
 django-allauth
 django-extensions
 Werkzeug
-pyOpenSSL
+cryptography
 django-csp
 firebase_admin
 django-dotenv

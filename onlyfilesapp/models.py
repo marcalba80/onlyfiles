@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 
@@ -18,7 +19,14 @@ class UserRepo(models.Model):
 
 class Repository(models.Model):
     name = models.CharField(max_length=120)
+    identifier = models.UUIDField(editable=False, unique=True)
     master_key = models.TextField(null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.identifier:
+            self.identifier = uuid.uuid4()
+
+        super().save(*args, **kwargs)
 
     def __unicode__(self):
         return u"%s" % self.name
@@ -42,9 +50,16 @@ class User_Repository(models.Model):
 
 class Files(models.Model):
     name = models.CharField(max_length=120)
+    identifier = models.UUIDField(editable=False, unique=True)
     cloud_url = models.TextField(null=True)
-    file_rand = models.TextField(null=True)
     # file = models.FileField()
+    tag = models.CharField(max_length=120, editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.identifier:
+            self.identifier = uuid.uuid4()
+
+        super().save(*args, **kwargs)
 
     def delete(self):
         self.file.delete()

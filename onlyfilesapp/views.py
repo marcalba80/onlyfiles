@@ -11,10 +11,12 @@ from django.core.exceptions import ValidationError
 
 from onlyfilesapp.models import *
 from onlyfilesapp.forms import *
+from onlyfilesapp.crypto import *
 from onlyfilesapp.firebase import FIREBASE_BUCKET
 
 import urllib, os
 import magic
+import uuid
 
 # Create your views here.
 
@@ -115,24 +117,26 @@ def Repo(request):
 def GetFile(request):
     pk = request.GET.get('pk')
     userr = UserRepo.objects.get(user=request.user)
-    file = Files.objects.get(pk=pk)
-    filerepo = Files_Repository.objects.get(file=file)
+    file_instance = Files.objects.get(pk=pk)
+    filerepo = Files_Repository.objects.get(file=file_instance)
     userepo = User_Repository.objects.get(userepo=userr, repository=filerepo.repository)
-    if userepo:
-        blob = FIREBASE_BUCKET.blob(str(filerepo.repository.pk) + "/" + file.name)
+
+    if userepo and file_instance:
+        blob = FIREBASE_BUCKET.blob(str(filerepo.repository.pk) + "/" + file_instance.name)
         
-        fcloud = open("./tmp/" + file.name, "wb")
+        fcloud = open("./tmp/" + file_instance.name, "wb")
         blob.download_to_file(fcloud)
         fcloud.close()
-        fcloud = open("./tmp/" + file.name, "rb")
+        fcloud = open("./tmp/" + file_instance.name, "rb")
+        dec_file = decrypt_file(filerepo.repository.master_key, salt=file_instance.identifier.bytes, info=filerepo.repository.identifier.bytes, tag=file_instance.tag, file=fcloud)
         # print(fcloud)
-        # response = FileResponse(file.file)
-        response = FileResponse(fcloud)
+        # response = FileResponse(file_instance.file)
+        response = FileResponse(dec_file)
         response['Content-Type'] = 'text/plain'
         # namef = str(file.file.name).split('_')
         # name = '_'.join(namef[0:len(namef)-1])
         # response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
-        response['Content-Disposition'] = 'attachment; filename="{}"'.format(file.name) # You can set custom filename, which will be visible for clients.
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_instance.name) # You can set custom filename, which will be visible for clients.
         # fcloud.close()
         # os.remove("./tmp/" + file.name)
         return response
@@ -147,7 +151,7 @@ def CreateRepo(request):
         repo = User_Repository.objects.filter(repository__name=repo_name, userepo=user, user_admin=True)
 
         if not repo:
-            repo_inst = Repository(name=repo_name, master_key="")
+            repo_inst = Repository(name=repo_name, master_key=generate_master_key_repository())
             repo_inst.save()
             repouser_inst = User_Repository(userepo=user, repository=repo_inst, user_admin=True)
             repouser_inst.save()
@@ -245,14 +249,23 @@ def AddFile(request):
                     messages.error(request, "Unsupported file type")
                     context.update({'pk': repopk})
                     return render(request, template, context)
+ 
+                repo = Repository.objects.get(pk=repopk)
+                file_identifier = uuid.uuid4()
+                enc_f, tag = encrypt_file(repo.master_key, salt=file_identifier.bytes, info=repo.identifier.bytes, file=f)
 
+                # file_instance = Files(name=f.name, identifier=file_identifier, tag=tag)
+                # file_instance.save()
+                # file_instance.file.save(f.name, enc_f)
+                # repof = Files_Repository(repository=repos.repository, file=file_instance)
+                
                 blob = FIREBASE_BUCKET.blob(repopk + "/" + f.name)
-                blob.upload_from_file(f.file, content_type=f.content_type)
+                blob.upload_from_file(enc_f, content_type=f.content_type)
                 
                 # file = Files(name=f.name, file=f, cloud_url=blob.public_url)
-                file = Files(name=f.name, cloud_url=blob.public_url)
-                file.save()
-                repof = Files_Repository(repository=repos.repository, file=file)
+                file_instance = Files(name=f.name, cloud_url=blob.public_url, tag=tag, identifier=file_identifier)
+                file_instance.save()
+                repof = Files_Repository(repository=repos.repository, file=file_instance)
                 repof.save()
                 
                 url = reverse('Repositories')
