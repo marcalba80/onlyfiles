@@ -6,7 +6,6 @@ from onlyfilesapp import views
 
 urlpatterns = [
     path('', views.Init, name='init'),
-    # path('signup', views.Register.as_view(), name="signup"),
     path('repository', views.Repo, name="Repositories"),
     path('deleteRepo', views.DeleteRepo, name="DeleteRepo"),
 

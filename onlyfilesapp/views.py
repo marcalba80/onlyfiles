@@ -81,7 +81,6 @@ def Init(request):
         template = 'index.html'
     else:
         template = 'index2.html'
-    # print("User: " + str(request.user.is_authenticated))
     context = {
         
     }
@@ -132,16 +131,11 @@ def GetFile(request):
         fcloud.close()
         fcloud = open("./tmp/" + enc_name, "rb")
         dec_file = decrypt_file(filerepo.repository.master_key, salt=file_instance.identifier.bytes, info=filerepo.repository.identifier.bytes, tag=file_instance.tag, file=fcloud)
-        # print(fcloud)
-        # response = FileResponse(file_instance.file)
+        
         response = FileResponse(dec_file)
         response['Content-Type'] = 'text/plain'
-        # namef = str(file.file.name).split('_')
-        # name = '_'.join(namef[0:len(namef)-1])
-        # response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(name) # You can set custom filename, which will be visible for clients.
+        
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_instance.name) # You can set custom filename, which will be visible for clients.
-        # fcloud.close()
-        # os.remove("./tmp/" + file.name)
         return response
 
 @csrf_protect
@@ -182,10 +176,9 @@ def AddUser(request):
     if request.user.is_authenticated:            
         repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
         if repos:
-            # files = Files_Repository.objects.filter(repository=repos.repository)
+            
             context.update(
                 {
-                # "repo": repos.repository,
                 "is_admin": repos.user_admin,
                 }
             )
@@ -212,7 +205,6 @@ def AddUser(request):
             url = reverse('Repositories')
             params = urllib.parse.urlencode({"pk": repopk})
             return redirect(url + "?%s" % params)
-            # return Repo(request)
     
     return render(request, template, context)
 
@@ -234,10 +226,9 @@ def AddFile(request):
         user = UserRepo.objects.get(user=request.user)
         repos = User_Repository.objects.get(userepo=user, repository__pk=repopk)
         if repos:
-            # files = Files_Repository.objects.filter(repository=repos.repository)
+            
             context.update(
                 {
-                # "repo": repos.repository,
                 "is_admin": repos.user_admin,
                 }
             )
@@ -256,11 +247,6 @@ def AddFile(request):
                 repo = Repository.objects.get(pk=repopk)
                 file_identifier = uuid.uuid4()
                 enc_f, tag = encrypt_file(repo.master_key, salt=file_identifier.bytes, info=repo.identifier.bytes, file=f)
-
-                # file_instance = Files(name=f.name, identifier=file_identifier, tag=tag)
-                # file_instance.save()
-                # file_instance.file.save(f.name, enc_f)
-                # repof = Files_Repository(repository=repos.repository, file=file_instance)
                 
                 enc_name = f.name.replace(".txt", ".enc")
                 blob = FIREBASE_BUCKET.blob(repopk + "/" + enc_name)
