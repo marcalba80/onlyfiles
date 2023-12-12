@@ -15,12 +15,12 @@ The code requires Django libraries and other Python libraries. To install the ne
 ## Configuration
 
 1. Run the application with the Usage command and create a super user: `python3 manage.py createsuperuser`
-2. Access the admin panel at https://localhost/shoronpo, log in, and create a Social Application record by providing your Google OAuth credentials for the project.
+2. To make OAuth2.0 using Google as a provider work you should access the admin panel at https://localhost/shoronpo, log in, and create a Social Application record by providing your Google OAuth credentials for the project.
 3. Create a .env file containing all the Firebase configuration details.
 
 ## Usage
 
-Run the following command:
+Execute the following command to run a HTTPS development server, given a web certificate :
 
 `python3 manage.py runserver_plus --cert-file webserver.crt.pem --key-file webserver.key.pem localhost:8000`
 
