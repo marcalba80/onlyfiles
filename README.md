@@ -16,7 +16,7 @@ The code requires Django libraries and other Python libraries. To install the ne
 
 1. Run the application with the Usage command and create a super user: `python3 manage.py createsuperuser`
 2. To make OAuth2.0 using Google as a provider work you should access the admin panel at https://localhost/shoronpo, log in, and create a Social Application record by providing your Google OAuth credentials for the project.
-3. Create a .env file containing all the Firebase configuration details.
+3. Create a .env file containing all the Firebase and Django configuration details.
 
 ## Usage
 
